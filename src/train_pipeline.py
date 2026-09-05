@@ -19,7 +19,7 @@ class ModelTrainer:
     """
 
     def __init__(self, max_features: int = 5000, ngram_range: tuple = (1, 2)):
-        self.preprocessor = TextPreprocessor()
+        self.preprocessor = TextPreprocessor(use_stemming=True)
         self.vectorizer = TfidfVectorizer(
             max_features=max_features,
             ngram_range=ngram_range,
@@ -52,7 +52,7 @@ class ModelTrainer:
         cv_results = {}
 
         for name, model in self.models.items():
-            # Cross-validation
+            # Stratified Cross-validation on training matrix
             scores = cross_val_score(model, X_matrix, y_labels, cv=cv_folds, scoring="accuracy")
             
             # Fit model on full training matrix
@@ -68,7 +68,8 @@ class ModelTrainer:
 
     def tune_hyperparameters(self, X_matrix, y_labels):
         """
-        Example hyperparameter tuning using GridSearchCV for Logistic Regression.
+        Hyperparameter tuning using GridSearchCV for Logistic Regression.
+        Sets the best estimator as the final model instance for evaluation and export.
         """
         param_grid = {
             "C": [0.1, 1.0, 10.0],
@@ -82,6 +83,10 @@ class ModelTrainer:
             n_jobs=-1
         )
         grid_search.fit(X_matrix, y_labels)
+        
+        # Assign best tuned estimator as the final Logistic Regression model
+        self.trained_models["Logistic Regression"] = grid_search.best_estimator_
+        
         return grid_search.best_params_, grid_search.best_score_
 
     def save_artifacts(self, output_dir: str = "models"):

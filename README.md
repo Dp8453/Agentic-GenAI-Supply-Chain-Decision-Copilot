@@ -18,63 +18,43 @@ To build an explainable, lightweight, and robust text classification system that
 
 ## 🧠 System Architecture & Pipeline
 
-The pipeline follows a clean, modular Classical Machine Learning workflow:
-
 ```
-Full Article Input Text
+Full Article Input
        │
        ▼
-┌────────────────────────────────────────────────────────┐
-│               1. NLTK Preprocessing Pipeline           │
-│  - Lowercasing                                         │
-│  - URL & HTML Tag Stripping                            │
-│  - Regex Cleaning (Non-alphabetic filter)              │
-│  - Stopword Removal (NLTK English Corpus)              │
-│  - Stemming (NLTK Porter Stemmer)                      │
-└──────────────────────────┬─────────────────────────────┘
-                           │
-                           ▼
-┌────────────────────────────────────────────────────────┐
-│            2. TF-IDF Feature Extraction                │
-│  - TfidfVectorizer (Unigrams & Bigrams)                │
-│  - Sublinear TF Scaling                                │
-│  - Fitted exclusively on X_train (No Data Leakage)     │
-└──────────────────────────┬─────────────────────────────┘
-                           │
-                           ▼
-┌────────────────────────────────────────────────────────┐
-│           3. Classical Machine Learning Classifiers    │
-│  - Multinomial Naive Bayes                             │
-│  - Logistic Regression                                 │
-│  - Linear SVM (CalibratedClassifierCV / LinearSVC)     │
-└──────────────────────────┬─────────────────────────────┘
-                           │
-                           ▼
-┌────────────────────────────────────────────────────────┐
-│               4. Output Classification                 │
-│  - Prediction: Fake (0) vs Real (1)                    │
-│  - Actual Model Probability / Confidence               │
-│  - Top Feature Tokens Highlight (TF-IDF weights)       │
-└────────────────────────────────────────────────────────┘
+NLTK NLP Preprocessing
+(Lowercasing, URL & HTML stripping, Regex cleaning, Stopwords removal, Porter stemming)
+       │
+       ▼
+TF-IDF Feature Extraction
+(Unigrams & Bigrams, Sublinear TF scaling, fitted strictly on training split)
+       │
+       ▼
+Classical ML Classification
+(Multinomial Naive Bayes, Logistic Regression, Calibrated Linear SVM)
+       │
+       ▼
+Fake / Real Output
+(Classification prediction + Model probability + Top TF-IDF term weights)
 ```
 
 ---
 
-## 📊 Evaluation & Benchmarks
+## 📊 Dataset & Model Evaluation
 
-### Training & Metric Generation
-Running `python train.py` executes the entire pipeline, splits the data, fits the TF-IDF vectorizer, performs 5-fold cross-validation and hyperparameter tuning, evaluates the models, and serializes both model binaries and metrics (`models/metrics.json`).
+### Primary Dataset: WELFake Dataset
+- **Source**: [Kaggle - WELFake Dataset](https://www.kaggle.com/datasets/saurabhshahane/fake-news-classification)
+- **Dataset File**: `data/news_dataset.csv` or `data/WELFake_Dataset.csv`
+- **Schema**: `title`, `text`, `label` (`0 = Fake`, `1 = Real`)
+- **Full Article Construction**: Concatenates `title` and `text` into a single body for text classification.
 
-### Reference Benchmark Performance (WELFake Dataset)
-*(Reference benchmark evaluations from classical ML text classification experiments on standard datasets)*
-
-| Classifier Model | Accuracy | Precision | Recall | F1-Score |
-| :--- | :---: | :---: | :---: | :---: |
-| **Linear SVM** | ~99.3% | ~0.99 | ~0.99 | ~0.99 |
-| **Logistic Regression** | ~98.7% | ~0.99 | ~0.98 | ~0.98 |
-| **Multinomial Naive Bayes** | ~93.7% | ~0.94 | ~0.93 | ~0.93 |
-
-> *Reference benchmark — not results from this repository until you execute `python train.py` to generate your local training metrics.*
+### Model Evaluation
+Actual evaluation metrics are generated when running `python train.py`. Metrics are computed on holdout test data using Stratified 80/20 train/test splits and saved to `models/metrics.json`:
+- **Accuracy**
+- **Precision**
+- **Recall**
+- **F1-Score**
+- **Confusion Matrix**
 
 ---
 
@@ -82,22 +62,22 @@ Running `python train.py` executes the entire pipeline, splits the data, fits th
 
 ```
 AI-Fake-News-Detection-ML-NLP/
-├── .gitignore             # Standard Git ignore rules
+├── .gitignore             # Git ignore rules
 ├── README.md              # Project documentation
 ├── requirements.txt        # Minimal Python dependencies
 ├── app.py                 # Interactive Streamlit web interface
 ├── train.py               # End-to-end model training & evaluation script
 ├── predict.py             # Command-line interface (CLI) prediction tool
 ├── data/
-│   └── README.md          # Dataset documentation & guidelines
+│   └── README.md          # Dataset documentation & WELFake schema
 ├── notebooks/
-│   └── fake_news_detection_walkthrough.ipynb  # Interactive EDA & ML walkthrough
+│   └── fake_news_detection_walkthrough.ipynb  # Reproducible EDA & ML walkthrough
 ├── models/
 │   └── README.md          # Guide on saved model binaries (.joblib) & metrics.json
 └── src/
     ├── __init__.py        # Package initializer
     ├── preprocessing.py   # TextPreprocessor class (NLTK cleaning & Porter stemming)
-    ├── train_pipeline.py  # ModelTrainer class (TF-IDF, CV, GridSearch, Joblib)
+    ├── train_pipeline.py  # ModelTrainer class (TF-IDF, CV, GridSearchCV, Joblib)
     └── evaluator.py       # ModelEvaluator class (Accuracy, F1, Confusion Matrix)
 ```
 
@@ -111,7 +91,7 @@ git clone https://github.com/Dp8453/AI-Fake-News-Detection-ML-NLP.git
 cd AI-Fake-News-Detection-ML-NLP
 ```
 
-### 2. Create a Virtual Environment (Optional but Recommended)
+### 2. Create & Activate Virtual Environment
 ```bash
 python -m venv venv
 # On Windows:
@@ -130,26 +110,18 @@ pip install -r requirements.txt
 ## 🚀 Usage Guide
 
 ### 1. Model Training & Evaluation (`train.py`)
-To run NLP preprocessing, TF-IDF vectorization, Stratified Train/Test split, 5-Fold Cross Validation, hyperparameter tuning, and save model binaries + `metrics.json` to `models/`:
+Place `news_dataset.csv` in `data/` and run:
 
 ```bash
 python train.py
 ```
 
 ### 2. Command Line Predictions (`predict.py`)
-To classify a news article from text or a text file:
-
 ```bash
-# Classify text string directly
 python predict.py --text "Federal Reserve announces interest rate policy decisions after quarterly economic review."
-
-# Classify text file using a specific model
-python predict.py --file sample_article.txt --model "Linear SVM"
 ```
 
-### 3. Launch Streamlit Frontend (`app.py`)
-To launch the interactive web application:
-
+### 3. Launch Streamlit Application (`app.py`)
 ```bash
 streamlit run app.py
 ```

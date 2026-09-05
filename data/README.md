@@ -1,15 +1,22 @@
 # Data Directory
 
-This directory contains dataset documentation and placeholders for training and evaluation data.
+This directory stores the training dataset for the AI Fake News Detection project.
 
-## Recommended Datasets
-1. **WELFake Dataset** (Kaggle): Over 72,000 labeled fake and real news articles.
-2. **ISOT Fake News Dataset**: Contains real news articles from Reuters and fake news articles from flagged online sources.
+## Primary Dataset: WELFake Dataset
+- **Source**: [Kaggle - WELFake Dataset](https://www.kaggle.com/datasets/saurabhshahane/fake-news-classification)
+- **File Name**: `data/news_dataset.csv` or `data/WELFake_Dataset.csv`
+- **Volume**: Over 72,000 labeled fake and real news articles.
 
-## Data Format
-CSV files placed in this directory should follow the column schema:
-- `text`: Full news article text body (String)
-- `label`: Binary classification target (`0` = Fake News, `1` = Real News)
+## Dataset Schema
+The pipeline expects a CSV file containing the following columns:
+- `title`: Headline of the news article (String)
+- `text`: Body text content of the news article (String)
+- `label`: Binary classification target (`0 = Fake News`, `1 = Real News`)
 
-## Data Generation Script
-Running `python train.py` will automatically load `data/news_dataset.csv` if present, or generate a baseline training dataset to verify the pipeline end-to-end.
+## Pipeline Data Handling
+When `python train.py` is executed, the pipeline automatically:
+1. Concatenates `title` and `text` to form `full_text` for complete article classification.
+2. Removes rows with missing text content or target labels.
+3. Applies NLTK NLP preprocessing (lowercasing, regex cleaning, stopword filtering, Porter stemming).
+4. Executes a Stratified 80/20 train/test split.
+5. Fits the `TfidfVectorizer` exclusively on the training split to prevent data leakage.

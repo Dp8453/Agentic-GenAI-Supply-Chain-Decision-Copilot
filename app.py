@@ -141,7 +141,7 @@ with tab_predict:
         if not input_text.strip():
             st.error("Please enter or paste news article text to analyze.")
         elif loaded_models is None or vectorizer is None:
-            st.error("❌ Trained model artifacts are not available. Please run `python train.py` first to train and serialize the models.")
+            st.error("Trained model artifacts are not available. Please run python train.py first.")
         else:
             cleaned_text = preprocessor.clean_text(input_text)
 
@@ -168,10 +168,12 @@ with tab_predict:
                                 pass
 
                     final_pred = 1 if sum(votes) >= 2 else 0
-                    confidence_str = f"{round(float(np.mean(probabilities)) * 100, 2)}%" if probabilities else "Probability not available for this ensemble"
+                    prob_label = "Average Model Probability"
+                    confidence_str = f"{round(float(np.mean(probabilities)) * 100, 2)}%" if probabilities else "Probability not available for this classifier"
                 else:
                     active_model = loaded_models.get(classifier_choice, list(loaded_models.values())[0])
                     final_pred = active_model.predict(vec_text)[0]
+                    prob_label = "Model Probability"
                     
                     if hasattr(active_model, "predict_proba"):
                         try:
@@ -187,7 +189,7 @@ with tab_predict:
                     st.markdown(f"""
                     <div class="verdict-box verdict-real">
                         <h2 style="margin:0;">✅ REAL NEWS ARTICLE</h2>
-                        <p style="font-size: 18px; font-weight: 600; margin-top:8px;">Model Confidence: {confidence_str}</p>
+                        <p style="font-size: 18px; font-weight: 600; margin-top:8px;">{prob_label}: {confidence_str}</p>
                         <p style="margin-bottom:0;">Classifier: {classifier_choice}</p>
                     </div>
                     """, unsafe_allow_html=True)
@@ -195,7 +197,7 @@ with tab_predict:
                     st.markdown(f"""
                     <div class="verdict-box verdict-fake">
                         <h2 style="margin:0;">⚠️ FAKE NEWS DETECTED</h2>
-                        <p style="font-size: 18px; font-weight: 600; margin-top:8px;">Model Confidence: {confidence_str}</p>
+                        <p style="font-size: 18px; font-weight: 600; margin-top:8px;">{prob_label}: {confidence_str}</p>
                         <p style="margin-bottom:0;">Classifier: {classifier_choice}</p>
                     </div>
                     """, unsafe_allow_html=True)
@@ -243,7 +245,7 @@ with tab_compare:
                 else:
                     st.write(cm)
     else:
-        st.warning("⚠️ Model evaluation metrics are not available. Please run `python train.py` first to generate actual evaluation metrics.")
+        st.warning("Model evaluation metrics are not available. Run python train.py to generate them.")
 
 with tab_about:
     st.markdown("### ℹ️ Project Architecture & Methodology")
