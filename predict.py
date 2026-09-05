@@ -11,9 +11,10 @@ from src.train_pipeline import ModelTrainer
 
 def predict_news(text: str, model_name: str = "Linear SVM", models_dir: str = "models"):
     """
-    Cleans input news text, transforms with TF-IDF, and returns classification prediction.
+    Cleans input news text using TextPreprocessor(use_stemming=True),
+    transforms with pre-fitted TF-IDF vectorizer, and returns classification prediction.
     """
-    preprocessor = TextPreprocessor()
+    preprocessor = TextPreprocessor(use_stemming=True)
     clean_text = preprocessor.clean_text(text)
 
     if not clean_text.strip():
@@ -33,10 +34,13 @@ def predict_news(text: str, model_name: str = "Linear SVM", models_dir: str = "m
     prediction = model.predict(vec_input)[0]
     verdict = "REAL" if prediction == 1 else "FAKE"
 
-    confidence = 50.0
+    confidence = None
     if hasattr(model, "predict_proba"):
-        probs = model.predict_proba(vec_input)[0]
-        confidence = round(float(probs[prediction]) * 100, 2)
+        try:
+            probs = model.predict_proba(vec_input)[0]
+            confidence = round(float(probs[prediction]) * 100, 2)
+        except (AttributeError, NotImplementedError):
+            confidence = None
 
     return {
         "verdict": verdict,
@@ -81,7 +85,8 @@ def main():
         print(f"[ERROR] {result['error']}")
     else:
         print(f"  Verdict     : {result['verdict']}")
-        print(f"  Confidence  : {result['confidence']}%")
+        conf_str = f"{result['confidence']}%" if result['confidence'] is not None else "N/A (Probability not available for this classifier)"
+        print(f"  Confidence  : {conf_str}")
         print(f"  Model       : {result['model_used']}")
         print(f"  Clean Text  : {result['cleaned_snippet']}")
     print("=" * 50 + "\n")

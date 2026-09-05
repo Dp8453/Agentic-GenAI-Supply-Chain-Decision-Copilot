@@ -1,7 +1,7 @@
 """
 Standalone Training Script for AI Fake News Detection (Classical ML + NLP)
 Runs data preprocessing, TF-IDF feature extraction, cross-validation, 
-hyperparameter tuning, model evaluation, and saves trained model binaries.
+hyperparameter tuning, model evaluation, and saves trained model binaries and metrics.json.
 """
 
 import os
@@ -60,24 +60,24 @@ def main():
         df.to_csv(dataset_path, index=False)
         print(f"[+] Created sample dataset at {dataset_path} ({len(df)} samples)")
 
-    # 1. NLP Preprocessing
-    print("[*] Running NLTK NLP Preprocessing (cleaning, stopword removal, stemming)...")
+    # 1. NLP Preprocessing (explicitly enable stemming)
+    print("[*] Running NLTK NLP Preprocessing (lowercasing, cleaning, stopwords, Porter stemming)...")
     preprocessor = TextPreprocessor(use_stemming=True)
     df["clean_text"] = preprocessor.preprocess_corpus(df["text"].tolist())
 
-    # 2. Train / Test Split
-    print("[*] Splitting dataset into train (80%) and test (20%) sets...")
+    # 2. Train / Test Split BEFORE TF-IDF fitting
+    print("[*] Splitting dataset into train (80%) and test (20%) sets (Stratified)...")
     X_train, X_test, y_train, y_test = train_test_split(
         df["clean_text"], df["label"], test_size=0.2, random_state=42, stratify=df["label"]
     )
 
-    # 3. Vectorization & Training Pipeline
+    # 3. Vectorization (Fit strictly on X_train)
     trainer = ModelTrainer(max_features=5000)
-    print("[*] Fitting TF-IDF Vectorizer...")
+    print("[*] Fitting TF-IDF Vectorizer on X_train...")
     X_train_tfidf = trainer.fit_vectorizer(X_train)
     X_test_tfidf = trainer.transform_text(X_test)
 
-    # 4. Train Models & Perform Cross-Validation
+    # 4. Train Models & Perform Stratified 5-Fold Cross-Validation
     print("[*] Training Naive Bayes, Logistic Regression, and Linear SVM models...")
     cv_results = trainer.train_and_evaluate_all(X_train_tfidf, y_train, cv_folds=5)
 
@@ -90,23 +90,34 @@ def main():
     print(f"    - Best Params: {best_params}")
     print(f"    - Best CV Accuracy: {best_score * 100:.2f}%")
 
-    # 6. Comprehensive Evaluation
+    # 6. Evaluation on Test Set
     print("\n" + "=" * 60)
     print("Test Set Evaluation Summary")
     print("=" * 60)
     comparison_df = ModelEvaluator.compare_models(trainer.trained_models, X_test_tfidf, y_test)
     print(comparison_df.to_string(index=False))
 
-    # 7. Save Model Artifacts
+    # Save detailed evaluation dictionary for metrics.json
+    detailed_metrics = {}
+    for name, model in trainer.trained_models.items():
+        eval_res = ModelEvaluator.evaluate_model(model, X_test_tfidf, y_test)
+        detailed_metrics[name] = {
+            "Accuracy": round(eval_res["accuracy"], 4),
+            "Precision": round(eval_res["precision"], 4),
+            "Recall": round(eval_res["recall"], 4),
+            "F1-Score": round(eval_res["f1_score"], 4),
+            "Confusion Matrix": eval_res["confusion_matrix"]
+        }
+
+    # 7. Save Model Artifacts & metrics.json
     models_dir = "models"
     print(f"\n[*] Saving trained vectorizer and models to {models_dir}/ directory...")
     trainer.save_artifacts(output_dir=models_dir)
-    
-    # Save evaluation summary JSON
-    metrics_path = os.path.join(models_dir, "evaluation_metrics.json")
+
+    metrics_path = os.path.join(models_dir, "metrics.json")
     with open(metrics_path, "w") as f:
-        json.dump(comparison_df.to_dict(orient="records"), f, indent=4)
-    print(f"[+] Saved evaluation metrics to {metrics_path}")
+        json.dump(detailed_metrics, f, indent=4)
+    print(f"[+] Saved actual evaluation metrics to {metrics_path}")
 
     print("\n[SUCCESS] Training pipeline completed successfully!")
 

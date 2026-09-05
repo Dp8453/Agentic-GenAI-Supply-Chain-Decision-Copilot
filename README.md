@@ -12,13 +12,13 @@ An end-to-end Classical Machine Learning and Natural Language Processing (NLP) r
 
 ## 🎯 Project Objective
 
-To build an explainable, lightweight, and robust text classification system that detects fake news articles based on linguistic patterns and stylometric features—without relying on heavy deep learning models, LLMs, or external third-party verification APIs.
+To build an explainable, lightweight, and robust text classification system that detects fake news articles based on linguistic patterns and statistical term frequencies—without relying on heavy deep learning models, LLMs, or external third-party fact-checking APIs.
 
 ---
 
 ## 🧠 System Architecture & Pipeline
 
-The pipeline follows a clean, modular classical Machine Learning workflow:
+The pipeline follows a clean, modular Classical Machine Learning workflow:
 
 ```
 Full Article Input Text
@@ -38,6 +38,7 @@ Full Article Input Text
 │            2. TF-IDF Feature Extraction                │
 │  - TfidfVectorizer (Unigrams & Bigrams)                │
 │  - Sublinear TF Scaling                                │
+│  - Fitted exclusively on X_train (No Data Leakage)     │
 └──────────────────────────┬─────────────────────────────┘
                            │
                            ▼
@@ -45,39 +46,35 @@ Full Article Input Text
 │           3. Classical Machine Learning Classifiers    │
 │  - Multinomial Naive Bayes                             │
 │  - Logistic Regression                                 │
-│  - Linear SVM (LinearSVC)                              │
+│  - Linear SVM (CalibratedClassifierCV / LinearSVC)     │
 └──────────────────────────┬─────────────────────────────┘
                            │
                            ▼
 ┌────────────────────────────────────────────────────────┐
 │               4. Output Classification                 │
 │  - Prediction: Fake (0) vs Real (1)                    │
-│  - Confidence / Probability Score                       │
-│  - Top Feature Tokens Highlight                        │
+│  - Actual Model Probability / Confidence               │
+│  - Top Feature Tokens Highlight (TF-IDF weights)       │
 └────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 📊 Dataset & Reference Benchmarks
+## 📊 Evaluation & Benchmarks
 
-### Dataset Overview
-- **Primary Reference Dataset**: [WELFake Dataset](https://www.kaggle.com/datasets/saurabhshahane/fake-news-classification) / ISOT Fake News Dataset.
-- **Dataset Structure**:
-  - `text`: Complete body text of news articles.
-  - `label`: Binary classification label (`0 = Fake`, `1 = Real`).
-  - Total Volume: ~72,000 labeled articles across politics, world news, and general news categories.
+### Training & Metric Generation
+Running `python train.py` executes the entire pipeline, splits the data, fits the TF-IDF vectorizer, performs 5-fold cross-validation and hyperparameter tuning, evaluates the models, and serializes both model binaries and metrics (`models/metrics.json`).
 
-### Reference Performance Comparison
-*(Evaluated across classical ML models on benchmark news datasets using 5-Fold Cross Validation)*
+### Reference Benchmark Performance (WELFake Dataset)
+*(Reference benchmark evaluations from classical ML text classification experiments on standard datasets)*
 
 | Classifier Model | Accuracy | Precision | Recall | F1-Score |
 | :--- | :---: | :---: | :---: | :---: |
-| **Linear SVM** *(Best)* | **99.31%** | **0.99** | **0.99** | **0.99** |
-| **Logistic Regression** | **98.74%** | **0.99** | **0.98** | **0.98** |
-| **Multinomial Naive Bayes** | **93.71%** | **0.94** | **0.93** | **0.93** |
+| **Linear SVM** | ~99.3% | ~0.99 | ~0.99 | ~0.99 |
+| **Logistic Regression** | ~98.7% | ~0.99 | ~0.98 | ~0.98 |
+| **Multinomial Naive Bayes** | ~93.7% | ~0.94 | ~0.93 | ~0.93 |
 
-> *Note: Metrics above reflect reference benchmark evaluations from classical ML text classification experiments on the WELFake dataset.*
+> *Reference benchmark — not results from this repository until you execute `python train.py` to generate your local training metrics.*
 
 ---
 
@@ -96,11 +93,11 @@ AI-Fake-News-Detection-ML-NLP/
 ├── notebooks/
 │   └── fake_news_detection_walkthrough.ipynb  # Interactive EDA & ML walkthrough
 ├── models/
-│   └── README.md          # Guide on saved model binaries (.joblib)
+│   └── README.md          # Guide on saved model binaries (.joblib) & metrics.json
 └── src/
     ├── __init__.py        # Package initializer
-    ├── preprocessing.py   # TextPreprocessor class (NLTK cleaning & stemming)
-    ├── train_pipeline.py  # ModelTrainer class (TF-IDF, CV, GridSearch)
+    ├── preprocessing.py   # TextPreprocessor class (NLTK cleaning & Porter stemming)
+    ├── train_pipeline.py  # ModelTrainer class (TF-IDF, CV, GridSearch, Joblib)
     └── evaluator.py       # ModelEvaluator class (Accuracy, F1, Confusion Matrix)
 ```
 
@@ -133,7 +130,7 @@ pip install -r requirements.txt
 ## 🚀 Usage Guide
 
 ### 1. Model Training & Evaluation (`train.py`)
-To run NLP preprocessing, TF-IDF vectorization, Stratified Train/Test split, 5-Fold Cross Validation, hyperparameter tuning, and save model binaries to `models/`:
+To run NLP preprocessing, TF-IDF vectorization, Stratified Train/Test split, 5-Fold Cross Validation, hyperparameter tuning, and save model binaries + `metrics.json` to `models/`:
 
 ```bash
 python train.py
@@ -167,14 +164,6 @@ This repository strictly adheres to **Classical Machine Learning + NLP**:
 - ❌ **NO** Transformer models (BERT, RoBERTa, DistilBERT)
 - ❌ **NO** Deep Learning neural networks (CNN, LSTM, BiLSTM)
 - ❌ **NO** SerpAPI / Google News API / External web scraping / Third-party fact-checking APIs
-
----
-
-## 🔮 Future Improvements
-
-- Add n-gram feature importance visualization charts in Streamlit.
-- Support multi-file batch CSV predictions for dataset analysis.
-- Include Lemmatization options alongside Porter Stemming for comparative linguistic study.
 
 ---
 
