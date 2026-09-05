@@ -8,14 +8,17 @@ def download_nltk_dependencies():
     """
     Safely download necessary NLTK datasets if not already available locally.
     """
-    for resource in ["stopwords", "punkt", "wordnet", "omw-1.4"]:
+    for resource in ["stopwords", "punkt"]:
         try:
             nltk.data.find(f"corpora/{resource}")
         except LookupError:
             try:
                 nltk.data.find(f"tokenizers/{resource}")
             except LookupError:
-                nltk.download(resource, quiet=True)
+                try:
+                    nltk.download(resource, quiet=True)
+                except Exception:
+                    pass
 
 
 class TextPreprocessor:

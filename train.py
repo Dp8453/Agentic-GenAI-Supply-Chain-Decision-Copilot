@@ -58,7 +58,14 @@ def load_welfake_dataset(data_dir: str = "data") -> pd.DataFrame:
     df = df.dropna(subset=["full_text", "label"]).reset_index(drop=True)
     df["label"] = df["label"].astype(int)
 
-    print(f"[+] Loaded {len(df)} total articles.")
+    # Check for and remove exact duplicate full_text records before splitting
+    initial_count = len(df)
+    df = df.drop_duplicates(subset=["full_text"]).reset_index(drop=True)
+    duplicates_removed = initial_count - len(df)
+
+    print(f"[+] Cleaned dataset rows (non-null): {initial_count}")
+    print(f"[+] Exact duplicate full_text records removed: {duplicates_removed}")
+    print(f"[+] Total unique articles remaining: {len(df)}")
     print(f"    - Fake articles (0): {(df['label'] == 0).sum()}")
     print(f"    - Real articles (1): {(df['label'] == 1).sum()}")
 
@@ -83,6 +90,8 @@ def main():
     X_train, X_test, y_train, y_test = train_test_split(
         df["clean_text"], df["label"], test_size=0.2, random_state=42, stratify=df["label"]
     )
+    print(f"    - Training set size (X_train): {len(X_train)} samples")
+    print(f"    - Testing set size (X_test): {len(X_test)} samples")
 
     # 4. TF-IDF Vectorization (Fitted exclusively on X_train)
     trainer = ModelTrainer(max_features=5000)

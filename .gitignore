@@ -73,3 +73,8 @@ venv.bak/
 # Trained model binaries (optional large files)
 # models/*.pkl
 # models/*.joblib
+
+# Data files (large dataset CSVs)
+data/*.csv
+*.csv
+
