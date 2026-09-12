@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: supplychain_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-supplychain_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-supplychain_pass}
+      POSTGRES_DB: ${POSTGRES_DB:-supplychain_db}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-supplychain_user} -d ${POSTGRES_DB:-supplychain_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: supplychain_backend
+    restart: unless-stopped
+    environment:
+      APP_NAME: "SupplyChain AI"
+      APP_ENV: "production"
+      DEBUG: "False"
+      POSTGRES_USER: ${POSTGRES_USER:-supplychain_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-supplychain_pass}
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: ${POSTGRES_DB:-supplychain_db}
+      LLM_PROVIDER: ${LLM_PROVIDER:-fake}
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: supplychain_frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
