@@ -1,13 +1,13 @@
-# Byte-compiled / optimized / DLL files
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
-
-# C extensions
 *.so
-
-# Distribution / packaging
 .Python
+env/
+venv/
+.venv/
+ENV/
 build/
 develop-eggs/
 dist/
@@ -20,61 +20,42 @@ parts/
 sdist/
 var/
 wheels/
-share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-MANIFEST
 
-# PyInstaller
-*.manifest
-*.spec
-
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.nox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.py.cookiecutter
-.hypothesis/
+# Testing & Notebooks
 .pytest_cache/
-cover/
+.coverage
+htmlcov/
+.ipynb_checkpoints/
 
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# Environment variables & secrets
+# Environment & Secrets
 .env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
+.env.local
+*.pem
+*.key
 
-# Streamlit
-.streamlit/
+# Node / React
+node_modules/
+frontend/dist/
+frontend/build/
+.eslintcache
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# IDE files
+# Database & Data Output
+*.sqlite3
+*.db
+data/processed/*.parquet
+data/processed/*.csv
+!data/processed/.gitkeep
+
+# IDEs & OS
 .vscode/
 .idea/
 *.swp
 *.swo
-
-# Trained model binaries (optional large files)
-# models/*.pkl
-# models/*.joblib
-
-# Data files (large dataset CSVs)
-data/*.csv
-*.csv
-
+.DS_Store
+Thumbs.db

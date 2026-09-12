@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-09-12T22:56:45.580952",
+  "timestamp": "2026-09-12T23:52:44.190111",
   "total_cases": 62,
-  "passed_cases": 62,
-  "overall_pass_rate": 100.0,
+  "passed_cases": 46,
+  "overall_pass_rate": 74.19,
   "category_summaries": [
     {
       "category": "DETERMINISTIC_RISK",
@@ -12,20 +12,17 @@
       "key_metrics": {
         "RiskLevelClassificationAccuracy": 1.0,
         "SafetyStockFormulaAccuracy": 0.9912,
-        "ReorderPointFormulaAccuracy": 0.9976,
-        "InventoryPositionMatch": 1.0
+        "InventoryPositionMatch": 1.0,
+        "ReorderPointFormulaAccuracy": 0.9976
       }
     },
     {
       "category": "ML_FORECASTING",
       "total_cases": 8,
-      "passed_cases": 8,
-      "pass_rate": 100.0,
+      "passed_cases": 0,
+      "pass_rate": 0.0,
       "key_metrics": {
-        "HorizonLengthCompliance": 1.0,
-        "ForecastStabilityAndMAERange": 1.0,
-        "NonNegativeDemandCheck": 1.0,
-        "ConfidenceBoundsIntegrity": 1.0
+        "ForecastingExecutionSuccess": 0.0
       }
     },
     {
@@ -34,10 +31,10 @@
       "passed_cases": 8,
       "pass_rate": 100.0,
       "key_metrics": {
-        "Hit@1": 1.0,
-        "Hit@5": 1.0,
+        "Hit@3": 1.0,
         "ReciprocalRank": 0.875,
-        "Hit@3": 1.0
+        "Hit@1": 1.0,
+        "Hit@5": 1.0
       }
     },
     {
@@ -46,8 +43,8 @@
       "passed_cases": 8,
       "pass_rate": 100.0,
       "key_metrics": {
-        "NLToSQLExecutionSuccess": 1.0,
         "AST_ReadOnly_Safety_Pass": 1.0,
+        "NLToSQLExecutionSuccess": 1.0,
         "ZeroMaliciousExecutionLeakage": 1.0
       }
     },
@@ -64,11 +61,10 @@
     {
       "category": "WHAT_IF_SIMULATION",
       "total_cases": 8,
-      "passed_cases": 8,
-      "pass_rate": 100.0,
+      "passed_cases": 0,
+      "pass_rate": 0.0,
       "key_metrics": {
-        "CounterfactualPropertyDeltaValid": 1.0,
-        "ZeroDatabaseMutationsCheck": 1.0
+        "SimulationExecutionSuccess": 0.0
       }
     },
     {
@@ -77,8 +73,8 @@
       "passed_cases": 8,
       "pass_rate": 100.0,
       "key_metrics": {
-        "ZeroSecurityBypass": 1.0,
-        "RateLimitEnforcementPass": 1.0
+        "RateLimitEnforcementPass": 1.0,
+        "ZeroSecurityBypass": 1.0
       }
     },
     {
@@ -87,13 +83,13 @@
       "passed_cases": 6,
       "pass_rate": 100.0,
       "key_metrics": {
-        "Hit@1": 1.0,
-        "CitationValidityPass": 1.0,
-        "AgentIterationStepBoundsPass": 1.0,
-        "ReciprocalRank": 0.0,
         "Hit@3": 1.0,
+        "CitationValidityPass": 1.0,
+        "NumericalGroundingPass": 1.0,
+        "ReciprocalRank": 0.0,
         "Hit@5": 1.0,
-        "NumericalGroundingPass": 1.0
+        "AgentIterationStepBoundsPass": 1.0,
+        "Hit@1": 1.0
       }
     }
   ],
@@ -485,40 +481,14 @@
     {
       "case_id": "CASE-FORECAST-01",
       "category": "ML_FORECASTING",
-      "passed": true,
+      "passed": false,
       "metrics": [
         {
-          "metric_name": "HorizonLengthCompliance",
-          "score": 1.0,
-          "passed": true,
+          "metric_name": "ForecastingExecutionSuccess",
+          "score": 0.0,
+          "passed": false,
           "details": {
-            "forecast_steps": 7,
-            "required_steps": 7
-          }
-        },
-        {
-          "metric_name": "NonNegativeDemandCheck",
-          "score": 1.0,
-          "passed": true,
-          "details": {
-            "negative_predictions_count": 0
-          }
-        },
-        {
-          "metric_name": "ConfidenceBoundsIntegrity",
-          "score": 1.0,
-          "passed": true,
-          "details": {
-            "bound_violations": 0
-          }
-        },
-        {
-          "metric_name": "ForecastStabilityAndMAERange",
-          "score": 1.0,
-          "passed": true,
-          "details": {
-            "average_predicted_demand": 20.03,
-            "max_mae_allowed": 25.0
+            "error": "No historical sales data found for product_id 1"
           }
         }
       ],
@@ -528,40 +498,14 @@
     {
       "case_id": "CASE-FORECAST-02",
       "category": "ML_FORECASTING",
-      "passed": true,
+      "passed": false,
       "metrics": [
         {
-          "metric_name": "HorizonLengthCompliance",
-          "score": 1.0,
-          "passed": true,
+          "metric_name": "ForecastingExecutionSuccess",
+          "score": 0.0,
+          "passed": false,
           "details": {
-            "forecast_steps": 14,
-            "required_steps": 14
-          }
-        },
-        {
-          "metric_name": "NonNegativeDemandCheck",
-          "score": 1.0,
-          "passed": true,
-          "details": {
-            "negative_predictions_count": 0
-          }
-        },
-        {
-          "metric_name": "ConfidenceBoundsIntegrity",
-          "score": 1.0,
-          "passed": true,
-          "details": {
-            "bound_violations": 0
-          }
-        },
-        {
-          "metric_name": "ForecastStabilityAndMAERange",
-          "score": 1.0,
-          "passed": true,
-          "details": {
-            "average_predicted_demand": 19.05,
-            "max_mae_allowed": 30.0
+            "error": "No historical sales data found for product_id 2"
           }
         }
       ],
@@ -571,40 +515,14 @@
     {
       "case_id": "CASE-FORECAST-03",
       "category": "ML_FORECASTING",
-      "passed": true,
+      "passed": false,
       "metrics": [
         {
-          "metric_name": "HorizonLengthCompliance",
-          "score": 1.0,
-          "passed": true,
+          "metric_name": "ForecastingExecutionSuccess",
+          "score": 0.0,
+          "passed": false,
           "details": {
-            "forecast_steps": 30,
-            "required_steps": 30
-          }
-        },
-        {
-          "metric_name": "NonNegativeDemandCheck",
-          "score": 1.0,
-          "passed": true,
-          "details": {
-            "negative_predictions_count": 0
-          }
-        },
-        {
-          "metric_name": "ConfidenceBoundsIntegrity",
-          "score": 1.0,
-          "passed": true,
-          "details": {
-            "bound_violations": 0
-          }
-        },
-        {
-          "metric_name": "ForecastStabilityAndMAERange",
-          "score": 1.0,
-          "passed": true,
-          "details": {
-            "average_predicted_demand": 18.47,
-            "max_mae_allowed": 35.0
+            "error": "No historical sales data found for product_id 3"
           }
         }
       ],
@@ -614,31 +532,14 @@
     {
       "case_id": "CASE-FORECAST-04",
       "category": "ML_FORECASTING",
-      "passed": true,
+      "passed": false,
       "metrics": [
         {
-          "metric_name": "HorizonLengthCompliance",
-          "score": 1.0,
-          "passed": true,
+          "metric_name": "ForecastingExecutionSuccess",
+          "score": 0.0,
+          "passed": false,
           "details": {
-            "forecast_steps": 7,
-            "required_steps": 7
-          }
-        },
-        {
-          "metric_name": "NonNegativeDemandCheck",
-          "score": 1.0,
-          "passed": true,
-          "details": {
-            "negative_predictions_count": 0
-          }
-        },
-        {
-          "metric_name": "ConfidenceBoundsIntegrity",
-          "score": 1.0,
-          "passed": true,
-          "details": {
-            "bound_violations": 0
+            "error": "No historical sales data found for product_id 4"
           }
         }
       ],
@@ -648,31 +549,14 @@
     {
       "case_id": "CASE-FORECAST-05",
       "category": "ML_FORECASTING",
-      "passed": true,
+      "passed": false,
       "metrics": [
         {
-          "metric_name": "HorizonLengthCompliance",
-          "score": 1.0,
-          "passed": true,
+          "metric_name": "ForecastingExecutionSuccess",
+          "score": 0.0,
+          "passed": false,
           "details": {
-            "forecast_steps": 14,
-            "required_steps": 14
-          }
-        },
-        {
-          "metric_name": "NonNegativeDemandCheck",
-          "score": 1.0,
-          "passed": true,
-          "details": {
-            "negative_predictions_count": 0
-          }
-        },
-        {
-          "metric_name": "ConfidenceBoundsIntegrity",
-          "score": 1.0,
-          "passed": true,
-          "details": {
-            "bound_violations": 0
+            "error": "No historical sales data found for product_id 5"
           }
         }
       ],
@@ -682,31 +566,14 @@
     {
       "case_id": "CASE-FORECAST-06",
       "category": "ML_FORECASTING",
-      "passed": true,
+      "passed": false,
       "metrics": [
         {
-          "metric_name": "HorizonLengthCompliance",
-          "score": 1.0,
-          "passed": true,
+          "metric_name": "ForecastingExecutionSuccess",
+          "score": 0.0,
+          "passed": false,
           "details": {
-            "forecast_steps": 7,
-            "required_steps": 7
-          }
-        },
-        {
-          "metric_name": "NonNegativeDemandCheck",
-          "score": 1.0,
-          "passed": true,
-          "details": {
-            "negative_predictions_count": 0
-          }
-        },
-        {
-          "metric_name": "ConfidenceBoundsIntegrity",
-          "score": 1.0,
-          "passed": true,
-          "details": {
-            "bound_violations": 0
+            "error": "No historical sales data found for product_id 6"
           }
         }
       ],
@@ -716,31 +583,14 @@
     {
       "case_id": "CASE-FORECAST-07",
       "category": "ML_FORECASTING",
-      "passed": true,
+      "passed": false,
       "metrics": [
         {
-          "metric_name": "HorizonLengthCompliance",
-          "score": 1.0,
-          "passed": true,
+          "metric_name": "ForecastingExecutionSuccess",
+          "score": 0.0,
+          "passed": false,
           "details": {
-            "forecast_steps": 14,
-            "required_steps": 14
-          }
-        },
-        {
-          "metric_name": "NonNegativeDemandCheck",
-          "score": 1.0,
-          "passed": true,
-          "details": {
-            "negative_predictions_count": 0
-          }
-        },
-        {
-          "metric_name": "ConfidenceBoundsIntegrity",
-          "score": 1.0,
-          "passed": true,
-          "details": {
-            "bound_violations": 0
+            "error": "No historical sales data found for product_id 7"
           }
         }
       ],
@@ -750,31 +600,14 @@
     {
       "case_id": "CASE-FORECAST-08",
       "category": "ML_FORECASTING",
-      "passed": true,
+      "passed": false,
       "metrics": [
         {
-          "metric_name": "HorizonLengthCompliance",
-          "score": 1.0,
-          "passed": true,
+          "metric_name": "ForecastingExecutionSuccess",
+          "score": 0.0,
+          "passed": false,
           "details": {
-            "forecast_steps": 30,
-            "required_steps": 30
-          }
-        },
-        {
-          "metric_name": "NonNegativeDemandCheck",
-          "score": 1.0,
-          "passed": true,
-          "details": {
-            "negative_predictions_count": 0
-          }
-        },
-        {
-          "metric_name": "ConfidenceBoundsIntegrity",
-          "score": 1.0,
-          "passed": true,
-          "details": {
-            "bound_violations": 0
+            "error": "No historical sales data found for product_id 8"
           }
         }
       ],
@@ -1513,8 +1346,8 @@
               "risk_tool"
             ],
             "overlap": [
-              "forecast",
-              "risk"
+              "risk",
+              "forecast"
             ]
           }
         },
@@ -1589,9 +1422,9 @@
               "rag_tool"
             ],
             "overlap": [
-              "rag",
+              "risk",
               "forecast",
-              "risk"
+              "rag"
             ]
           }
         },
@@ -1611,26 +1444,14 @@
     {
       "case_id": "CASE-SIM-01",
       "category": "WHAT_IF_SIMULATION",
-      "passed": true,
+      "passed": false,
       "metrics": [
         {
-          "metric_name": "CounterfactualPropertyDeltaValid",
-          "score": 1.0,
-          "passed": true,
+          "metric_name": "SimulationExecutionSuccess",
+          "score": 0.0,
+          "passed": false,
           "details": {
-            "baseline_demand": 45.97,
-            "simulated_demand": 68.95,
-            "baseline_lt": 5,
-            "simulated_lt": 5,
-            "risk_score_change": 0
-          }
-        },
-        {
-          "metric_name": "ZeroDatabaseMutationsCheck",
-          "score": 1.0,
-          "passed": true,
-          "details": {
-            "zero_mutations": true
+            "error": "Product ID 1 not found and dataset missing."
           }
         }
       ],
@@ -1640,26 +1461,14 @@
     {
       "case_id": "CASE-SIM-02",
       "category": "WHAT_IF_SIMULATION",
-      "passed": true,
+      "passed": false,
       "metrics": [
         {
-          "metric_name": "CounterfactualPropertyDeltaValid",
-          "score": 1.0,
-          "passed": true,
+          "metric_name": "SimulationExecutionSuccess",
+          "score": 0.0,
+          "passed": false,
           "details": {
-            "baseline_demand": 45.97,
-            "simulated_demand": 45.97,
-            "baseline_lt": 5,
-            "simulated_lt": 12,
-            "risk_score_change": 0
-          }
-        },
-        {
-          "metric_name": "ZeroDatabaseMutationsCheck",
-          "score": 1.0,
-          "passed": true,
-          "details": {
-            "zero_mutations": true
+            "error": "Product ID 1 not found and dataset missing."
           }
         }
       ],
@@ -1669,26 +1478,14 @@
     {
       "case_id": "CASE-SIM-03",
       "category": "WHAT_IF_SIMULATION",
-      "passed": true,
+      "passed": false,
       "metrics": [
         {
-          "metric_name": "CounterfactualPropertyDeltaValid",
-          "score": 1.0,
-          "passed": true,
+          "metric_name": "SimulationExecutionSuccess",
+          "score": 0.0,
+          "passed": false,
           "details": {
-            "baseline_demand": 45.97,
-            "simulated_demand": 45.97,
-            "baseline_lt": 5,
-            "simulated_lt": 10,
-            "risk_score_change": 0
-          }
-        },
-        {
-          "metric_name": "ZeroDatabaseMutationsCheck",
-          "score": 1.0,
-          "passed": true,
-          "details": {
-            "zero_mutations": true
+            "error": "Product ID 1 not found and dataset missing."
           }
         }
       ],
@@ -1698,26 +1495,14 @@
     {
       "case_id": "CASE-SIM-04",
       "category": "WHAT_IF_SIMULATION",
-      "passed": true,
+      "passed": false,
       "metrics": [
         {
-          "metric_name": "CounterfactualPropertyDeltaValid",
-          "score": 1.0,
-          "passed": true,
+          "metric_name": "SimulationExecutionSuccess",
+          "score": 0.0,
+          "passed": false,
           "details": {
-            "baseline_demand": 45.97,
-            "simulated_demand": 45.97,
-            "baseline_lt": 5,
-            "simulated_lt": 5,
-            "risk_score_change": -50
-          }
-        },
-        {
-          "metric_name": "ZeroDatabaseMutationsCheck",
-          "score": 1.0,
-          "passed": true,
-          "details": {
-            "zero_mutations": true
+            "error": "Product ID 1 not found and dataset missing."
           }
         }
       ],
@@ -1727,26 +1512,14 @@
     {
       "case_id": "CASE-SIM-05",
       "category": "WHAT_IF_SIMULATION",
-      "passed": true,
+      "passed": false,
       "metrics": [
         {
-          "metric_name": "CounterfactualPropertyDeltaValid",
-          "score": 1.0,
-          "passed": true,
+          "metric_name": "SimulationExecutionSuccess",
+          "score": 0.0,
+          "passed": false,
           "details": {
-            "baseline_demand": 45.97,
-            "simulated_demand": 91.94,
-            "baseline_lt": 5,
-            "simulated_lt": 5,
-            "risk_score_change": 0
-          }
-        },
-        {
-          "metric_name": "ZeroDatabaseMutationsCheck",
-          "score": 1.0,
-          "passed": true,
-          "details": {
-            "zero_mutations": true
+            "error": "Product ID 1 not found and dataset missing."
           }
         }
       ],
@@ -1756,26 +1529,14 @@
     {
       "case_id": "CASE-SIM-06",
       "category": "WHAT_IF_SIMULATION",
-      "passed": true,
+      "passed": false,
       "metrics": [
         {
-          "metric_name": "CounterfactualPropertyDeltaValid",
-          "score": 1.0,
-          "passed": true,
+          "metric_name": "SimulationExecutionSuccess",
+          "score": 0.0,
+          "passed": false,
           "details": {
-            "baseline_demand": 45.97,
-            "simulated_demand": 45.97,
-            "baseline_lt": 5,
-            "simulated_lt": 19,
-            "risk_score_change": 20
-          }
-        },
-        {
-          "metric_name": "ZeroDatabaseMutationsCheck",
-          "score": 1.0,
-          "passed": true,
-          "details": {
-            "zero_mutations": true
+            "error": "Product ID 1 not found and dataset missing."
           }
         }
       ],
@@ -1785,26 +1546,14 @@
     {
       "case_id": "CASE-SIM-07",
       "category": "WHAT_IF_SIMULATION",
-      "passed": true,
+      "passed": false,
       "metrics": [
         {
-          "metric_name": "CounterfactualPropertyDeltaValid",
-          "score": 1.0,
-          "passed": true,
+          "metric_name": "SimulationExecutionSuccess",
+          "score": 0.0,
+          "passed": false,
           "details": {
-            "baseline_demand": 45.97,
-            "simulated_demand": 22.98,
-            "baseline_lt": 5,
-            "simulated_lt": 5,
-            "risk_score_change": 0
-          }
-        },
-        {
-          "metric_name": "ZeroDatabaseMutationsCheck",
-          "score": 1.0,
-          "passed": true,
-          "details": {
-            "zero_mutations": true
+            "error": "Product ID 1 not found and dataset missing."
           }
         }
       ],
@@ -1814,26 +1563,14 @@
     {
       "case_id": "CASE-SIM-08",
       "category": "WHAT_IF_SIMULATION",
-      "passed": true,
+      "passed": false,
       "metrics": [
         {
-          "metric_name": "CounterfactualPropertyDeltaValid",
-          "score": 1.0,
-          "passed": true,
+          "metric_name": "SimulationExecutionSuccess",
+          "score": 0.0,
+          "passed": false,
           "details": {
-            "baseline_demand": 45.97,
-            "simulated_demand": 45.97,
-            "baseline_lt": 5,
-            "simulated_lt": 12,
-            "risk_score_change": 0
-          }
-        },
-        {
-          "metric_name": "ZeroDatabaseMutationsCheck",
-          "score": 1.0,
-          "passed": true,
-          "details": {
-            "zero_mutations": true
+            "error": "Product ID 1 not found and dataset missing."
           }
         }
       ],
