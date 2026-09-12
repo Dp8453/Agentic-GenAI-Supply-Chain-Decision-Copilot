@@ -1,7 +1,7 @@
 {
   "model_name": "XGBoost Regressor Demand Forecaster",
   "version": "1.0.0",
-  "trained_at": "2026-09-13 02:21:59",
+  "trained_at": "2026-09-13 04:27:51",
   "training_data_end": "2024-02-29 00:00:00",
   "selected_model": "XGBoost Regressor",
   "features": [
@@ -22,16 +22,16 @@
   ],
   "metrics": {
     "baseline": {
-      "mae": 2.6,
-      "rmse": 2.932575659723036
+      "mae": 1.6,
+      "rmse": 1.8973665961010275
     },
     "gradient_boosting": {
-      "mae": 1.6910579204559326,
-      "rmse": 1.7838150262832642
+      "mae": 1.3429591655731201,
+      "rmse": 1.3756394386291504
     },
     "selected": {
-      "mae": 1.6910579204559326,
-      "rmse": 1.7838150262832642
+      "mae": 1.3429591655731201,
+      "rmse": 1.3756394386291504
     }
   }
 }

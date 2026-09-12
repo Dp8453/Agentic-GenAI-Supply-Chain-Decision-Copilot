@@ -23,12 +23,15 @@ INSTRUCTION_OVERRIDE_PATTERNS = [
     r"disregard\s+(all\s+)?(previous|system|developer|above|prior)\s+instructions",
     r"forget\s+(all\s+)?(previous|system|developer|above|prior)\s+instructions",
     r"override\s+(system|safety|security)\s+(rules|prompt|instructions)",
+    r"system\s+override",
     r"disable\s+(all\s+)?(safety|security|guardrails|checks|validators)",
-    r"bypass\s+(safety|security|sql|tool)\s+(restrictions|filters|checks)",
+    r"bypass\s+(safety|security|sql|tool|authentication)\s+(restrictions|filters|checks|methods)?",
     r"pretend\s+you\s+are\s+(an?\s+)?unrestricted",
     r"act\s+as\s+(an?\s+)?unrestricted",
     r"you\s+are\s+now\s+in\s+jailbreak\s+mode",
     r"dan\s+mode\s+enabled",
+    r"you\s+are\s+dan",
+    r"dan\s*\(\s*do\s+anything\s+now\s*\)",
 ]
 
 SECRET_EXTRACTION_PATTERNS = [
@@ -38,9 +41,11 @@ SECRET_EXTRACTION_PATTERNS = [
     r"what\s+is\s+your\s+(system|developer|hidden)\s+prompt",
     r"show\s+(me\s+)?(the\s+)?api\s+key",
     r"reveal\s+(the\s+)?api\s+key",
+    r"print\s+.*(api_key|db_password|openai_api_key|secret)",
     r"show\s+(me\s+)?(the\s+)?database\s+(password|url|credentials)",
     r"reveal\s+(the\s+)?database\s+(password|url|credentials)",
     r"print\s+env\s+variables",
+    r"exfiltrate",
 ]
 
 UNAUTHORIZED_MUTATION_PATTERNS = [

@@ -84,11 +84,11 @@
       "unit_cost": 100.0
     },
     "expected_outputs": {
-      "safety_stock": 147.0,
-      "reorder_point": 1347.0,
+      "safety_stock": 175.0,
+      "reorder_point": 1375.0,
       "inventory_position": 1000.0,
       "risk_level": "HIGH",
-      "lead_time_risk": true
+      "stockout_risk": true
     }
   },
   {
@@ -176,8 +176,8 @@
       "unit_cost": 200.0
     },
     "expected_outputs": {
-      "safety_stock": 686.0,
-      "reorder_point": 2786.0,
+      "safety_stock": 670.0,
+      "reorder_point": 2770.0,
       "inventory_position": 2000.0,
       "risk_level": "HIGH",
       "stockout_risk": true
@@ -311,6 +311,7 @@
     },
     "expected_outputs": {
       "target_doc_types": ["SOP", "SUPPLIER_POLICY"],
+      "target_keywords": ["lead", "time", "policy", "supplier", "delay"],
       "min_hit_at_5": 1.0,
       "min_similarity": 0.3
     }

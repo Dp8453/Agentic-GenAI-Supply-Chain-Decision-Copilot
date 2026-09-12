@@ -5,7 +5,7 @@
 [![React](https://img.shields.io/badge/React-18-61DAFB.svg)](https://reactjs.org/)
 [![LangGraph](https://img.shields.io/badge/LangGraph-Agentic-orange.svg)](https://langchain-ai.github.io/langgraph/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-pgvector-336791.svg)](https://github.com/pgvector/pgvector)
-[![Build & Tests](https://img.shields.io/badge/Backend%20Tests-69%2F69%20PASSED-brightgreen.svg)]()
+[![Build & Tests](https://img.shields.io/badge/Backend%20Tests-82%2F82%20PASSED-brightgreen.svg)]()
 
 An enterprise-ready agentic GenAI decision-support control tower combining LLM reasoning, pgvector RAG, natural-language SQL, XGBoost machine-learning forecasting, deterministic inventory risk calculation, what-if counterfactual simulation, and HTTP security guardrails into an operational React web dashboard.
 
